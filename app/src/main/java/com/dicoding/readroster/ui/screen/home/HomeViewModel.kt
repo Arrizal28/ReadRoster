@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dicoding.readroster.data.BookRepository
-import com.dicoding.readroster.model.Book
 import com.dicoding.readroster.model.OrderBook
 import com.dicoding.readroster.ui.common.UiState
 import kotlinx.coroutines.flow.MutableStateFlow

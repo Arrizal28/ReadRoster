@@ -195,23 +195,6 @@ fun DetailContent(
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun DetailContentPreview() {
-//    ReadRosterTheme {
-//        DetailContent(
-//            R.drawable.book_1,
-//            "Jaket Hoodie Dicoding",
-//            "dadasdsad",
-//            "A motivational book that provides tips and tricks on how to start, grow, and optimize an online business in the digital age.",
-//            15,
-//            1,
-//            onBackClick = {},
-//            onAddToCart = {}
-//        )
-//    }
-//}
-
 @Preview(showBackground = true, device = Devices.PIXEL_4)
 @Composable
 fun DetailContentPreview() {

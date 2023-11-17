@@ -162,13 +162,12 @@ private fun BottomBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyTopAppBar(
-    modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
 ) {
     TopAppBar(
         navigationIcon = {
             IconButton(onClick = onBackClick) {
-                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Menu")
+                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = stringResource(R.string.back))
             }
         },
         title = {

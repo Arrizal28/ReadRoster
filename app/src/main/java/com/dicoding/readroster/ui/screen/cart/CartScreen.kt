@@ -1,6 +1,7 @@
 package com.dicoding.readroster.ui.screen.cart
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,7 +15,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -68,46 +71,64 @@ fun CartContent(
         state.orderBook.count(),
         state.totalPrice
     )
-    Column(
-        modifier = modifier.fillMaxSize()
-    ) {
-        CenterAlignedTopAppBar(
-            title = {
-                Text(
-                    text = stringResource(R.string.menu_cart),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp,
-                    textAlign = TextAlign.Center
-                )
-            }
-        )
-        LazyColumn(
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.weight(weight = 1f)
+    if (state.orderBook.isNotEmpty()) {
+        Column(
+            modifier = modifier.fillMaxSize()
         ) {
-            items(state.orderBook, key = { it.book.id }) { item ->
-                CartItem(
-                    bookId = item.book.id,
-                    image = item.book.image,
-                    title = item.book.title,
-                    totalPrice = item.book.price * item.count,
-                    count = item.count,
-                    onProductCountChanged = onProductCountChanged,
-                )
-                Divider()
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(R.string.menu_cart),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            )
+            LazyColumn(
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.weight(weight = 1f)
+            ) {
+                items(state.orderBook, key = { it.book.id }) { item ->
+                    CartItem(
+                        bookId = item.book.id,
+                        image = item.book.image,
+                        title = item.book.title,
+                        totalPrice = item.book.price * item.count,
+                        count = item.count,
+                        onProductCountChanged = onProductCountChanged,
+                    )
+                    Divider()
+                }
             }
+            OrderButton(
+                text = stringResource(R.string.total_order, state.totalPrice),
+                enabled = state.orderBook.isNotEmpty(),
+                onClick = {
+                    onOrderButtonClicked(shareMessage)
+                },
+                modifier = Modifier.padding(16.dp)
+            )
         }
-        OrderButton(
-            text = stringResource(R.string.total_order, state.totalPrice),
-            enabled = state.orderBook.isNotEmpty(),
-            onClick = {
-                onOrderButtonClicked(shareMessage)
-            },
-            modifier = Modifier.padding(16.dp)
+    } else {
+        CartEmpty(
+            modifier = modifier.testTag("CartEmpty")
         )
+    }
+}
+
+@Composable
+fun CartEmpty(
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(stringResource(R.string.empty_cart))
     }
 }

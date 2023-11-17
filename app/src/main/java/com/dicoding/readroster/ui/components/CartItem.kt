@@ -82,7 +82,7 @@ fun CartItemPreview() {
     ReadRosterTheme {
         CartItem(
             1, R.drawable.book_1, "Jaket Hoodie Dicoding", 15, 0,
-            onProductCountChanged = { bookId, count -> },
+            onProductCountChanged = { _, _ -> },
         )
     }
 }

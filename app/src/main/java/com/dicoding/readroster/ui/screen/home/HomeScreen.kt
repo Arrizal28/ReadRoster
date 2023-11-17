@@ -1,10 +1,14 @@
 package com.dicoding.readroster.ui.screen.home
 
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -21,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -47,6 +52,7 @@ fun HomeScreen(
             is UiState.Loading -> {
                 viewModel.getAllBooks()
             }
+
             is UiState.Success -> {
                 HomeContent(
                     orderBook = uiState.data,
@@ -54,11 +60,15 @@ fun HomeScreen(
                     navigateToDetail = navigateToDetail,
                 )
             }
-            is UiState.Error -> {}
+
+            is UiState.Error -> {
+
+            }
         }
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeContent(
     orderBook: List<OrderBook>,
@@ -73,24 +83,32 @@ fun HomeContent(
             onQueryChange = viewModel::search,
             modifier = Modifier.background(MaterialTheme.colorScheme.primary)
         )
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(160.dp),
-            contentPadding = PaddingValues(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = modifier.testTag("BookList")
-        ) {
-            items(orderBook, key = { it.book.id}) { data ->
-                BookItem(
-                    image = data.book.image,
-                    title = data.book.title,
-                    author = data.book.author,
-                    price = data.book.price,
-                    modifier = Modifier.clickable {
-                        navigateToDetail(data.book.id)
-                    }
-                )
+        if (orderBook.isNotEmpty()) {
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(160.dp),
+                contentPadding = PaddingValues(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = modifier.testTag("BookList")
+            ) {
+                items(orderBook, key = { it.book.id }) { data ->
+                    BookItem(
+                        image = data.book.image,
+                        title = data.book.title,
+                        author = data.book.author,
+                        price = data.book.price,
+                        modifier = Modifier
+                            .animateItemPlacement(tween(durationMillis = 100))
+                            .clickable {
+                                navigateToDetail(data.book.id)
+                            }
+                    )
+                }
             }
+        } else {
+            HomeEmpty(
+                modifier = modifier.testTag("EmptyHome")
+            )
         }
     }
 }
@@ -127,23 +145,14 @@ fun SearchBar(
     }
 }
 
-//@Composable
-//fun HomeContent(
-//    orderBook: List<OrderBook>,
-//    modifier: Modifier = Modifier,
-//) {
-//    LazyColumn(
-//        contentPadding = PaddingValues(16.dp),
-//        verticalArrangement = Arrangement.spacedBy(16.dp),
-//        modifier = modifier.testTag("BookList")
-//    ) {
-//        items(orderBook, key = { it.book.id}) { data ->
-//            BookItem(
-//                image = data.book.image,
-//                title = data.book.title,
-//                author = data.book.author,
-//                price = data.book.price,
-//            )
-//        }
-//    }
-//}
+@Composable
+fun HomeEmpty(
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(stringResource(R.string.empty_home))
+    }
+}
