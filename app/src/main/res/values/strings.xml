@@ -8,4 +8,10 @@
     <string name="back">Back</string>
     <string name="select_quantity">Select Quantity</string>
     <string name="add_to_cart">Add to Cart : $%d</string>
+    <string name="name_profile">Mohamad Arrizal</string>
+    <string name="email_profile">moh.arrizal666@gmail.com</string>
+    <string name="total_order">Total pesanan : $%d</string>
+    <string name="readroster_reward">ReadRoster Reward</string>
+    <string name="search_book">Search Books</string>
+    <string name="share_message">Hey, I have redeem %1$d rewards in Dicoding with total %2$d Points. Do you want too?</string>
 </resources>

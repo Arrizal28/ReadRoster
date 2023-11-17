@@ -27,9 +27,9 @@ class CartViewModel(
         }
     }
 
-    fun updateOrderBook(rewardId: Long, count: Int) {
+    fun updateOrderBook(bookId: Long, count: Int) {
         viewModelScope.launch {
-            repository.updateOrderBook(rewardId, count)
+            repository.updateOrderBook(bookId, count)
                 .collect { isUpdated ->
                     if (isUpdated) {
                         getAddedOrderBook()

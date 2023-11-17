@@ -1,10 +1,15 @@
 package com.dicoding.readroster.data
 
+import com.dicoding.readroster.model.Book
 import com.dicoding.readroster.model.FakeBookDataSource
 import com.dicoding.readroster.model.OrderBook
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
+import java.util.Locale.filter
 
 class BookRepository {
     private val OrderBooks = mutableListOf<OrderBook>()
@@ -21,18 +26,25 @@ class BookRepository {
         return flowOf(OrderBooks)
     }
 
-    fun getOrderBooksById(rewardId: Long): OrderBook {
+    fun searchBooks(query: String) = flow {
+        val data = OrderBooks.filter {
+            it.book.title.contains(query, ignoreCase = true)
+        }
+        emit(data)
+    }
+
+    fun getOrderBooksById(bookdId: Long): OrderBook {
         return OrderBooks.first {
-            it.book.id == rewardId
+            it.book.id == bookdId
         }
     }
 
-    fun updateOrderBook(rewardId: Long, newCountValue: Int): Flow<Boolean> {
-        val index = OrderBooks.indexOfFirst { it.book.id == rewardId }
+    fun updateOrderBook(bookId: Long, newCountValue: Int): Flow<Boolean> {
+        val index = OrderBooks.indexOfFirst { it.book.id == bookId }
         val result = if (index >= 0) {
-            val orderReward = OrderBooks[index]
+            val orderBook = OrderBooks[index]
             OrderBooks[index] =
-                orderReward.copy(book = orderReward.book, count = newCountValue)
+                orderBook.copy(book = orderBook.book, count = newCountValue)
             true
         } else {
             false
@@ -42,9 +54,9 @@ class BookRepository {
 
     fun getAddedOrderBooks(): Flow<List<OrderBook>> {
         return getAllBooks()
-            .map { orderRewards ->
-                orderRewards.filter { orderReward ->
-                    orderReward.count != 0
+            .map { orderBooks ->
+                orderBooks.filter { orderBook ->
+                    orderBook.count != 0
                 }
             }
     }

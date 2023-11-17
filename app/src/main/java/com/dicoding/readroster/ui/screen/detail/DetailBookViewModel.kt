@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class DetailRewardViewModel(
+class DetailBookViewModel(
     private val repository: BookRepository
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<UiState<OrderBook>> =
@@ -18,10 +18,10 @@ class DetailRewardViewModel(
     val uiState: StateFlow<UiState<OrderBook>>
         get() = _uiState
 
-    fun getRewardById(rewardId: Long) {
+    fun getBookById(bookId: Long) {
         viewModelScope.launch {
             _uiState.value = UiState.Loading
-            _uiState.value = UiState.Success(repository.getOrderBooksById(rewardId))
+            _uiState.value = UiState.Success(repository.getOrderBooksById(bookId))
         }
     }
 

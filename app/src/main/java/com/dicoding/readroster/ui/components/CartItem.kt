@@ -24,7 +24,7 @@ import com.dicoding.readroster.ui.theme.ReadRosterTheme
 
 @Composable
 fun CartItem(
-    rewardId: Long,
+    bookId: Long,
     image: Int,
     title: String,
     totalPrice: Int,
@@ -67,10 +67,10 @@ fun CartItem(
             )
         }
         ProductCounter(
-            orderId = rewardId,
+            orderId = bookId,
             orderCount = count,
-            onProductIncreased = { onProductCountChanged(rewardId, count + 1) },
-            onProductDecreased = { onProductCountChanged(rewardId, count - 1) },
+            onProductIncreased = { onProductCountChanged(bookId, count + 1) },
+            onProductDecreased = { onProductCountChanged(bookId, count - 1) },
             modifier = Modifier.padding(8.dp)
         )
     }
@@ -82,7 +82,7 @@ fun CartItemPreview() {
     ReadRosterTheme {
         CartItem(
             1, R.drawable.book_1, "Jaket Hoodie Dicoding", 15, 0,
-            onProductCountChanged = { rewardId, count -> },
+            onProductCountChanged = { bookId, count -> },
         )
     }
 }
